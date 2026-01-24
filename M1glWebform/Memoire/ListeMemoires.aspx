@@ -3,17 +3,26 @@
      <table style="width: 100%;">
         <tr>
             <td>
-                <asp:Button ID="btnNouveau" runat="server" Text="Nouveau" OnClick="btnNouveau_Click"  />
+                <asp:Button ID="btnNouveau" runat="server" Text="Nouveau" OnClick="btnNouveau_Click" CssClass="btn btn-primary" />
             </td>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
         </tr>
         <tr>
             <td colspan="3">
-                <asp:GridView ID="gvMemoire" runat="server" BackColor="White" BorderColor="#999999" BorderStyle="Solid" BorderWidth="1px" CellPadding="3" ForeColor="Black" GridLines="Vertical" Width="100%" OnSelectedIndexChanged="gvMemoire_SelectedIndexChanged">
+                <asp:GridView ID="gvMemoire" runat="server" BackColor="White" BorderColor="#999999" 
+                    BorderStyle="Solid" BorderWidth="1px" CellPadding="3" ForeColor="Black" 
+                    GridLines="Vertical" Width="100%" AutoGenerateColumns="False" 
+                    DataKeyNames="IdM" OnRowEditing="gvMemoire_RowEditing" 
+                    OnRowDeleting="gvMemoire_RowDeleting">
                     <AlternatingRowStyle BackColor="#CCCCCC" />
                     <Columns>
-                        <asp:CommandField ShowSelectButton="True" />
+                        <asp:BoundField DataField="IdM" HeaderText="ID" ReadOnly="True" />
+                        <asp:BoundField DataField="LibelleM" HeaderText="Titre" />
+                        <asp:BoundField DataField="Description" HeaderText="Description" />
+                        <asp:BoundField DataField="DateM" HeaderText="Date" DataFormatString="{0:dd/MM/yyyy}" />
+                        <asp:CommandField ShowEditButton="True" ButtonType="Button" EditText="Modifier" />
+                        <asp:CommandField ShowDeleteButton="True" ButtonType="Button" DeleteText="Supprimer" />
                     </Columns>
                     <FooterStyle BackColor="#CCCCCC" />
                     <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="White" />

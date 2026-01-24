@@ -11,21 +11,51 @@ namespace M1glWebform.Memoire
     public partial class ListeMemoires : System.Web.UI.Page
     {
         BdGestionMemoireContext db = new BdGestionMemoireContext();
+
         protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                ChargerMemoires();
+            }
+        }
+
+        private void ChargerMemoires()
         {
             gvMemoire.DataSource = db.Memoires.ToList();
             gvMemoire.DataBind();
-
         }
 
         protected void btnNouveau_Click(object sender, EventArgs e)
         {
-            Server.Transfer("NouveauMemoire.aspx");
+            Response.Redirect("NouveauMemoire.aspx");
         }
 
-        protected void gvMemoire_SelectedIndexChanged(object sender, EventArgs e)
+        protected void gvMemoire_RowEditing(object sender, GridViewEditEventArgs e)
         {
+            int idMemoire = Convert.ToInt32(gvMemoire.DataKeys[e.NewEditIndex].Value);
+            Response.Redirect("ModifierMemoire.aspx?id=" + idMemoire);
+        }
 
+        protected void gvMemoire_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            try
+            {
+                int idMemoire = Convert.ToInt32(gvMemoire.DataKeys[e.RowIndex].Value);
+                var memoire = db.Memoires.Find(idMemoire);
+
+                if (memoire != null)
+                {
+                    db.Memoires.Remove(memoire);
+                    db.SaveChanges();
+                    ChargerMemoires();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Gérer l'erreur
+                Response.Write("<script>alert('Erreur lors de la suppression : " + ex.Message + "');</script>");
+            }
         }
     }
 }
