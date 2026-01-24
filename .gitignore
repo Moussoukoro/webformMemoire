@@ -1,0 +1,120 @@
+# ==========================================
+# Visual Studio / ASP.NET WebForms
+# ==========================================
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio cache/options
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# NuGet Packages
+*.nupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+packages/
+
+# Web publish profiles
+PublishProfiles/
+*.pubxml
+*.publishproj
+
+# ==========================================
+# ASP.NET WebForms Specific
+# ==========================================
+
+# Connection strings et secrets
+**/App_Data/*.mdf
+**/App_Data/*.ldf
+**/App_Data/*.sdf
+
+# Fichiers de configuration locaux
+Web.config.user
+Web.Debug.config
+Web.Release.config
+
+# ==========================================
+# Fichiers Windows
+# ==========================================
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ==========================================
+# Fichiers temporaires
+# ==========================================
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# ==========================================
+# Logs
+# ==========================================
+*.log
+logs/
+*.txt
+
+# ==========================================
+# Autres
+# ==========================================
+node_modules/
+.env
+.env.local
