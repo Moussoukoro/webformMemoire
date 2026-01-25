@@ -13,6 +13,10 @@
         <%: Scripts.Render("~/bundles/modernizr") %>
     </asp:PlaceHolder>
     <webopt:bundlereference runat="server" path="~/Content/css" />
+  
+    
+    <!-- VOTRE CSS en plus (APRÈS le bundle) -->
+    <link href="/Content/StyleMemoires.css" rel="stylesheet" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
 </head>

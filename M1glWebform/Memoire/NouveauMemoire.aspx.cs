@@ -29,5 +29,9 @@ namespace M1glWebform.Memoire
             Server.Transfer("ListeMemoires.aspx");
 
         }
+        protected void btnAnnuler_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("ListeMemoires.aspx");
+        }
     }
 }
