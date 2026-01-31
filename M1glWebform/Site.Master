@@ -1,31 +1,32 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="M1glWebform.SiteMaster" %>
 
 <!DOCTYPE html>
-
 <html lang="fr">
 <head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%: Page.Title %> - Mon ASP.NET Application</title>
-
-    <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/bundles/modernizr") %>
-    </asp:PlaceHolder>
-    <webopt:bundlereference runat="server" path="~/Content/css" />
-  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Système de gestion des mémoires académiques" />
+    <meta name="author" content="" />
     
-    <!-- VOTRE CSS en plus (APRÈS le bundle) -->
-    <link href="/Content/StyleMemoires.css" rel="stylesheet" />
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
+    <title><%: Page.Title %> - Gestion Mémoires</title>
+    
+    <!-- ========== CSS DU TEMPLATE SB ADMIN ========== -->
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="~/Content/css/styles.css" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    
+    <!-- VOTRE CSS PERSONNALISÉ (SI VOUS VOULEZ GARDER VOS STYLES) -->
+    <link href="~/Content/StyleMemoires.css" rel="stylesheet" />
+    
 </head>
-<body>
-    <form runat="server">
+
+<body class="sb-nav-fixed">
+    <form id="form1" runat="server">
         <asp:ScriptManager runat="server">
             <Scripts>
-                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
-                <%--Framework Scripts--%>
                 <asp:ScriptReference Name="MsAjaxBundle" />
                 <asp:ScriptReference Name="jquery" />
                 <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
@@ -37,53 +38,157 @@
                 <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
                 <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
                 <asp:ScriptReference Name="WebFormsBundle" />
-                <%--Site Scripts--%>
             </Scripts>
         </asp:ScriptManager>
 
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" runat="server" href="~/">Nom de l'application</a>
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Activer/désactiver la navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/">Accueil</a></li>
-                         <li class="nav-item"><a class="nav-link" runat="server" href="~/Memoire/ListeMemoires">Memoire</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/About">À propos de</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contact</a></li>
-                    </ul>
-                    <asp:LoginView runat="server" ViewStateMode="Disabled">
-                        <AnonymousTemplate>
-                            <ul class="navbar-nav navbar-right">
-                                <li><a runat="server" class="nav-link" href="~/Account/Register">S’inscrire</a></li>
-                                <li><a runat="server" class="nav-link" href="~/Account/Login">Se connecter</a></li>
-                            </ul>
-                        </AnonymousTemplate>
-                        <LoggedInTemplate>
-                            <ul class="navbar-nav navbar-right">
-                                <li><a runat="server" class="nav-link" href="~/Account/Manage" title="Manage your account">Bonjour, <%: Context.User.Identity.GetUserName()  %> !</a></li>
-                                <li>
-                                    <asp:LoginStatus runat="server" CssClass="nav-link" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />
-                                </li>
-                            </ul>
-                        </LoggedInTemplate>
-                    </asp:LoginView>
+        <!-- ========== NAVBAR DU HAUT ========== -->
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Brand / Logo -->
+            <a class="navbar-brand ps-3" runat="server" href="~/">📚 Gestion Mémoires</a>
+            
+            <!-- Bouton toggle sidebar -->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <!-- Barre de recherche -->
+            <div class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Rechercher..." aria-label="Rechercher..." />
+                    <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
             </div>
+            
+            <!-- Menu utilisateur -->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Paramètres</a></li>
+                        <li><a class="dropdown-item" href="#!">Journal d'activité</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li>
+                            <asp:LoginView runat="server" ViewStateMode="Disabled">
+                                <AnonymousTemplate>
+                                    <a class="dropdown-item" runat="server" href="~/Account/Login">Se connecter</a>
+                                </AnonymousTemplate>
+                                <LoggedInTemplate>
+                                    <asp:LoginStatus runat="server" CssClass="dropdown-item" LogoutAction="Redirect" LogoutText="Déconnexion" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />
+                                </LoggedInTemplate>
+                            </asp:LoginView>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </nav>
-        <div class="container body-content">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
-            <hr />
-            <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - Mon application ASP.NET</p>
-            </footer>
+
+        <!-- ========== LAYOUT PRINCIPAL ========== -->
+        <div id="layoutSidenav">
+            
+            <!-- ========== SIDEBAR (MENU LATÉRAL) ========== -->
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            
+                            <div class="sb-sidenav-menu-heading">Principal</div>
+                            <a class="nav-link" runat="server" href="~/">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Accueil
+                            </a>
+                            
+                            <div class="sb-sidenav-menu-heading">Gestion</div>
+                            
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseMemoires" aria-expanded="false" aria-controls="collapseMemoires">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
+                                Mémoires
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseMemoires" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" runat="server" href="~/Memoire/ListeMemoires.aspx">
+                                        <i class="fas fa-list me-2"></i>Liste des mémoires
+                                    </a>
+                                    <a class="nav-link" runat="server" href="~/Memoire/NouveauMemoire.aspx">
+                                        <i class="fas fa-plus me-2"></i>Nouveau mémoire
+                                    </a>
+                                </nav>
+                            </div>
+                            
+                            <a class="nav-link" runat="server" href="~/About">
+                                <div class="sb-nav-link-icon"><i class="fas fa-info-circle"></i></div>
+                                À propos
+                            </a>
+                            
+                            <a class="nav-link" runat="server" href="~/Contact">
+                                <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
+                                Contact
+                            </a>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Connecté en tant que :</div>
+                        <asp:LoginView runat="server" ViewStateMode="Disabled">
+                            <AnonymousTemplate>
+                                Invité
+                            </AnonymousTemplate>
+                            <LoggedInTemplate>
+                                <%: Context.User.Identity.GetUserName() %>
+                            </LoggedInTemplate>
+                        </asp:LoginView>
+                    </div>
+                </nav>
+            </div>
+            
+            <!-- ========== CONTENU PRINCIPAL ========== -->
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </div>
+                </main>
+                
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Gestion Mémoires <%: DateTime.Now.Year %></div>
+                            <div>
+                                <a href="#">Politique de confidentialité</a>
+                                &middot;
+                                <a href="#">Conditions d'utilisation</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
         </div>
+
+        <!-- ========== SCRIPTS ========== -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+      <!-- <script src='<%: ResolveUrl("~/Scripts/js/scripts.js") %>'></script> -->
+
+        <!-- ✅ REMPLACEZ PAR CE CODE DIRECTEMENT -->
+        <script type="text/javascript">
+            window.addEventListener('DOMContentLoaded', function() {
+                // Toggle sidebar
+                var sidebarToggle = document.body.querySelector('#sidebarToggle');
+                if (sidebarToggle) {
+                    sidebarToggle.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        document.body.classList.toggle('sb-sidenav-toggled');
+                        localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                    });
+                }
+            });
+        </script>
+        
     </form>
-    <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
-    </asp:PlaceHolder></body>
+</body>
 </html>

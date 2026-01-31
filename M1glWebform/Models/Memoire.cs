@@ -12,10 +12,10 @@ namespace M1glWebform.Models
         public int IdM { get; set; }
 
         [Required]
-        [StringLength(200)]
+        [MaxLength(200)]
         public string LibelleM { get; set; } = string.Empty;
 
-        [StringLength(1000)]
+        [MaxLength(1000)]
         public string Description { get; set; }
 
         public DateTime DateM { get; set; }
@@ -23,7 +23,7 @@ namespace M1glWebform.Models
         [Range(0, 20)]
         public double? Note { get; set; }
 
-        [StringLength(50)]
+        [MaxLength(50)]
         public string Verdict { get; set; }
     }
 }
